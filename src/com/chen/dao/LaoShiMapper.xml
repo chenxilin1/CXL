@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" > 
+ <mapper namespace="com.chen.dao.LaoShiMapper"> 
+ <select id="loginls" resultType="com.chen.bean.LaoShi">
+ select * from t_laoshi where loginname=#{loginname} and loginpw=#{loginpw}
+ </select>
+ </mapper>

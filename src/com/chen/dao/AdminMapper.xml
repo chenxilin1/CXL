@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" > 
+ <mapper namespace="com.chen.dao.AdminMapper"> 
+<resultMap id="kb" type="KeBiao">
+   <id column="id" property="id"/>
+   <result property="shi_jian" column="shijian"/>
+   <result property="jieci" column="jieci"/>
+   <result property="jiaoshi" column="jiaoshi"/> 
+  <association  property="laoshi" javaType="LaoShi">
+  <id property="id" column="id"/>
+  <result property="xingming" column="xingming" />
+   </association>
+   <association  property="kecheng" javaType="Kecheng">
+   <id property="id" column="id" />
+	<result property="bianhao" column="bianhao"/>
+	<result property="mingcheng" column="mingcheng"/>
+	<result property="keshi" column="keshi"/>
+    </association>
+</resultMap>
+
+ 
+ <!-- 登录 -->
+<select id="login" resultType="com.chen.bean.Admin">
+select * from t_admin where userName=#{userName} and userPw=#{userPw}
+</select>
+
+<!-- 密码修改 -->
+<update id="adminPwEdit">
+update t_admin set userPw=#{userPw} where userName=#{userName}
+</update>
+
+<!-- 遍历管理员 -->
+<select id="All" resultType="com.chen.bean.Admin">
+select * from t_admin 
+</select>
+
+<!-- 删除管理员 -->
+<delete id="adminDel">
+delete  from t_admin where userId=#{id}
+</delete>
+
+<!-- 添加管理员 -->
+<insert id="adminAdd" >
+insert into t_admin  (userName,userPw) values(#{userName},#{userPw})
+</insert>
+
+<!-- 根据名称查找管理员 -->
+<select id="selectname" resultType="com.chen.bean.Admin">
+ select * from t_admin where userName=#{name}
+</select>
+
+<!-- 遍历课程 -->
+<select id="kechengall" resultType="com.chen.bean.Kecheng">
+select * from t_kecheng
+</select>
+
+<!-- 删除课程 -->
+<delete id="kechengDel">
+delete  from t_kecheng where id=#{id}
+</delete>
+
+<!-- 添加课程 -->
+<insert id="kechengadd">
+insert into t_kecheng(bianhao,mingcheng,keshi) values(#{bianhao},#{mingcheng},#{keshi})
+</insert>
+
+<!-- 遍历老师 -->
+<select id="laoshiall" resultType="com.chen.bean.LaoShi" >
+select * from t_laoshi
+</select>
+
+<!-- 删除老师 -->
+<delete id="laoshiDel">
+delete from t_laoshi where id=#{id}
+</delete>
+
+<!-- 添加老师 -->
+<insert id="laoshiAdd">
+insert into t_laoshi(bianhao,xingming,xingbie,nianling,zhicheng,loginname,loginpw) values(#{bianhao},#{xingming},#{xingbie},#{nianling},#{zhicheng},#{loginname},#{loginpw})
+</insert>
+
+<!-- 遍历课表 -->
+<select id="kebiaoall" resultMap="kb">
+select t_kebiao.id,t_kebiao.shijian,t_kebiao.jieci,t_kebiao.jiaoshi,t_kecheng.bianhao,t_kecheng.mingcheng,t_kecheng.keshi,t_laoshi.xingming   from t_kebiao ,t_kecheng ,t_laoshi  where t_kebiao.kecheng_id=t_kecheng.id and t_kebiao.laoshi_id=t_laoshi.id
+</select>
+
+<!-- 删除课表 -->
+<delete id="kebiaoDel">
+delete from t_kebiao where id=#{id}
+</delete>
+
+
+<!-- 添加课表 -->
+<insert id="kebiaoAdd">
+insert into t_kebiao(kecheng_id,shijian,jieci,jiaoshi,laoshi_id)values ( #{kecheng.id},#{shi_jian},#{jieci},#{jiaoshi},#{laoshi.id})
+</insert>
+<!--  学生遍历 -->
+<select id="xueshengall" resultType="com.chen.bean.Student">
+select * from t_xuesheng
+</select>
+
+<!-- 学生删除 -->
+<delete id="xueshengDel">
+delete from t_xuesheng where id=#{id}
+</delete>
+
+<!-- 学生添加 -->
+<insert id="xueshengAdd">
+insert into t_xuesheng(xuehao,xingming,xingbie,nianling,banji,loginname,loginpw) values(#{xuehao},#{xingming},#{xingbie},#{nianling},#{banji},#{loginname},#{loginpw})
+</insert>
+ </mapper>
+ 

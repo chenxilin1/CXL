@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" > 
+ <mapper namespace="com.chen.dao.StudentMapper"> 
+ 
+ <resultMap id="kb" type="KeBiao">
+   <id column="id" property="id"/>
+   <result property="shi_jian" column="shijian"/>
+   <result property="jieci" column="jieci"/>
+   <result property="jiaoshi" column="jiaoshi"/> 
+  <association  property="laoshi" javaType="LaoShi">
+     <id property="id" column="id"/>
+     <result property="xingming" column="xingming" />
+   </association>
+   <association  property="kecheng" javaType="Kecheng">
+     <id property="id" column="id" />
+	 <result property="bianhao" column="bianhao"/>
+	 <result property="mingcheng" column="mingcheng"/>
+	 <result property="keshi" column="keshi"/>
+   </association>
+</resultMap>
+ 
+ 
+ <!-- 学生登录 -->
+ <select id="logins" resultType="com.chen.bean.Student">
+ select * from t_xuesheng where loginname=#{loginname} and loginpw=#{loginpw}
+ </select>
+ 
+ <!-- 学生课表 -->
+ <select id="xskebiaoAll1" resultMap="kb">
+ select *
+ from t_xuesheng_kebiao as txk,t_kebiao as tk,t_laoshi as ls ,t_kecheng as kc 
+ where txk.xuesheng_id=#{id} and txk.kebiao_id=tk.id and  tk.laoshi_id=ls.id  and tk.kecheng_id=kc.id	    
+ </select>
+ 
+ <!-- 学生选课 -->
+ <insert id="xsaddkc">
+ insert into t_xuesheng_kebiao (xuesheng_id,kebiao_id) values (#{xs_id},#{kebiao_id})
+ </insert>
+ </mapper>
